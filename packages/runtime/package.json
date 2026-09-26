@@ -1,0 +1,14 @@
+{
+  "name": "@deja/runtime",
+  "version": "0.1.0",
+  "description": "Zero-dependency record/replay runtime for Node.js (preloaded with --require)",
+  "type": "commonjs",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./register": "./register.js",
+    "./log": "./src/log.js",
+    "./codec": "./src/codec.js",
+    "./launcher": "./src/launcher.js"
+  }
+}

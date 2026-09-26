@@ -1,0 +1,13 @@
+{
+  "name": "@deja/cli",
+  "version": "0.1.0",
+  "description": "deja — record a Node.js service, replay its bugs exactly",
+  "type": "module",
+  "bin": {
+    "deja": "./bin/deja.js"
+  },
+  "dependencies": {
+    "@deja/runtime": "0.1.0",
+    "@deja/viewer": "0.1.0"
+  }
+}

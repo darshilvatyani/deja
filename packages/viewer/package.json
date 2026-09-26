@@ -1,0 +1,13 @@
+{
+  "name": "@deja/viewer",
+  "version": "0.1.0",
+  "description": "Web viewer for deja recordings: strip-chart timeline, event tape, time-travel snapshots",
+  "type": "module",
+  "main": "server.js",
+  "exports": {
+    ".": "./server.js"
+  },
+  "dependencies": {
+    "@deja/runtime": "0.1.0"
+  }
+}

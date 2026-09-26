@@ -1,0 +1,11 @@
+{
+  "name": "deja-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Flash-sale checkout service with a once-in-a-while overselling bug",
+  "type": "module",
+  "dependencies": {
+    "fastify": "^5.6.0",
+    "@deja/cli": "0.1.0"
+  }
+}

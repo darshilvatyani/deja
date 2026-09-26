@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>déjà replay viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wdth,wght@75..112.5,300..700&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/deja.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='10' cy='16' r='7' fill='none' stroke='%23c62d1f' stroke-width='3'/%3E%3Ccircle cx='22' cy='16' r='7' fill='none' stroke='%231f1b14' stroke-width='3'/%3E%3C/svg%3E">
+  <script>
+    try {
+      const saved = localStorage.getItem('deja-theme');
+      if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+    } catch {}
+  </script>
+</head>
+<body>
+  <div class="sheet">
+    <header class="masthead">
+      <div class="brand">
+        <svg class="reels" viewBox="0 0 64 36" aria-hidden="true">
+          <circle cx="16" cy="18" r="13" class="reel" />
+          <circle cx="16" cy="18" r="3.2" class="hub" />
+          <circle cx="48" cy="18" r="13" class="reel" />
+          <circle cx="48" cy="18" r="3.2" class="hub" />
+          <path d="M16 31 L48 31" class="tapeline" />
+          <g class="spokes"><path d="M16 8 v4 M16 24 v4 M6 18 h4 M22 18 h4" /><path d="M48 8 v4 M48 24 v4 M38 18 h4 M54 18 h4" /></g>
+        </svg>
+        <div>
+          <h1>déjà</h1>
+          <p class="tagline">record&nbsp;·&nbsp;replay&nbsp;·&nbsp;debug&nbsp;— for node</p>
+        </div>
+      </div>
+
+      <dl class="label" id="label" aria-label="Recording details">
+        <div><dt>Recording</dt><dd>loading…</dd></div>
+      </dl>
+
+      <div class="switch" role="group" aria-label="Theme">
+        <span class="switch-cap">ink</span>
+        <button type="button" data-theme-set="light" aria-pressed="false">Paper</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">Phosphor</button>
+      </div>
+    </header>
+
+    <section class="incident" id="incident" aria-live="polite"></section>
+
+    <section class="panel chart-panel">
+      <div class="panel-head">
+        <span class="sec">§1</span>
+        <h2>Strip chart</h2>
+        <div class="legend" id="legend"></div>
+        <div class="zoom-read" id="zoomRead"></div>
+        <div class="zoomkeys" role="group" aria-label="Zoom">
+          <button type="button" class="key" data-zoom="out" title="Zoom out (-)">−</button>
+          <button type="button" class="key" data-zoom="in" title="Zoom in (+)">+</button>
+          <button type="button" class="key" data-zoom="fit" title="Fit whole recording (0)">fit</button>
+        </div>
+      </div>
+      <div class="chart-wrap" id="chartWrap">
+        <canvas id="chart" aria-label="Timeline of recorded events"></canvas>
+        <div class="tip" id="tip" hidden></div>
+      </div>
+      <div class="overview-wrap">
+        <canvas id="overview" aria-label="Whole-recording overview"></canvas>
+      </div>
+    </section>
+
+    <div class="split">
+      <section class="panel tape-panel">
+        <div class="panel-head">
+          <span class="sec">§2</span>
+          <h2>Tape</h2>
+          <span class="count" id="count"></span>
+        </div>
+        <div class="filters">
+          <div class="chips" id="chips"></div>
+          <div class="filter-row">
+            <label class="field">
+              <span>request</span>
+              <select id="reqFilter"><option value="">all</option></select>
+            </label>
+            <label class="field grow">
+              <span>find</span>
+              <input id="search" type="search" placeholder="kind, bytes, file:line…" autocomplete="off" spellcheck="false">
+            </label>
+          </div>
+        </div>
+        <div class="tape" id="tape" tabindex="0" aria-label="Event tape">
+          <div class="tape-spacer" id="tapeSpacer"></div>
+        </div>
+      </section>
+
+      <section class="panel inspector-panel">
+        <div class="panel-head">
+          <span class="sec">§3</span>
+          <h2>Inspector</h2>
+          <div class="deck" role="group" aria-label="Transport">
+            <button type="button" class="key" data-step="first" title="First event (Home)">⏮</button>
+            <button type="button" class="key" data-step="prev-delivery" title="Previous world event (K)">◀◀</button>
+            <button type="button" class="key" data-step="prev" title="Previous event (k)">◀</button>
+            <button type="button" class="key" data-step="next" title="Next event (j)">▶</button>
+            <button type="button" class="key" data-step="next-delivery" title="Next world event (J)">▶▶</button>
+            <button type="button" class="key crash-key" data-step="crash" title="Jump to crash (c)">✕</button>
+          </div>
+        </div>
+        <nav class="tabs" role="tablist">
+          <button type="button" role="tab" data-tab="event" aria-selected="true">Event</button>
+          <button type="button" role="tab" data-tab="request" aria-selected="false">Request story</button>
+          <button type="button" role="tab" data-tab="state" aria-selected="false">State @ <span id="stateN">—</span></button>
+        </nav>
+        <div class="insp-body" id="inspBody"></div>
+      </section>
+    </div>
+
+    <footer class="colophon">
+      <span><kbd>j</kbd>/<kbd>k</kbd> step</span>
+      <span><kbd>J</kbd>/<kbd>K</kbd> world events</span>
+      <span><kbd>c</kbd> crash</span>
+      <span><kbd>s</kbd> state at event</span>
+      <span><kbd>/</kbd> find</span>
+      <span><kbd>t</kbd> ink</span>
+      <span class="grow"></span>
+      <span><kbd>+</kbd>/<kbd>−</kbd> or ⌘-scroll to zoom · drag to pan · double-click to fit</span>
+    </footer>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

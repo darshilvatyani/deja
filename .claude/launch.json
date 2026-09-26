@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "viewer",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["packages/cli/bin/deja.js", "view", "recordings/crash.deja", "--no-open", "--port", "7077"],
+      "port": 7077
+    }
+  ]
+}

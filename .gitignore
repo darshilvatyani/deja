@@ -1,0 +1,4 @@
+node_modules/
+recordings/*.deja
+recordings/*.json
+.DS_Store
